@@ -16,7 +16,7 @@ def index():
     db_version = cur.fetchone()
     cur.close()
     conn.close()
-    return f'Connected to: {db_version[0]}'
+    return f'Connected to: {db_version[0]} and the DB URL is {os.getenv("DATABASE_URL")}'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
