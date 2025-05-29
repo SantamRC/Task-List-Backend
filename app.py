@@ -1,22 +1,19 @@
-from flask import Flask, request, jsonify
-import os
-import psycopg2
+from flask import Flask
+from config import Config
+from models import db
+from routes import bp
+from flask_cors import CORS
 
 app = Flask(__name__)
+app.config.from_object(Config)
+CORS(app)
 
-def get_db_connection():
-    conn = psycopg2.connect(os.getenv('DATABASE_URL'))
-    return conn
+db.init_app(app)
+app.register_blueprint(bp)
 
-@app.route('/')
-def index():
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute('SELECT version();')
-    db_version = cur.fetchone()
-    cur.close()
-    conn.close()
-    return f'Connected to: {db_version[0]} and the DB URL is {os.getenv("DATABASE_URL")}'
+@app.before_request
+def create_tables():
+    db.create_all()
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(debug=True)
