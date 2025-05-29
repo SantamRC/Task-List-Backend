@@ -4,6 +4,10 @@ from datetime import datetime
 
 bp = Blueprint('routes', __name__)
 
+@bp.route('/', methods=['GET'])
+def index():
+    return jsonify({"message": "Welcome to the Task Management API"}), 200
+
 
 @bp.route('/users', methods=['POST'])
 def create_user():
