@@ -86,9 +86,9 @@ def update_task(task_id):
             return jsonify({'error': 'Task name cannot be empty.'}), 400
 
     # Check for duplicates only if name is being changed
-    if new_name != task.task and Task.query.filter_by(task=new_name).first():
+    if new_name != task.title and Task.query.filter_by(title=new_name).first():
         return jsonify({'error': 'Another task with this name already exists.'}), 409
-    task.task = new_name
+    task.title = new_name
 
     # Update status if provided
     if 'status' in data:
